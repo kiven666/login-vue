@@ -1,7 +1,7 @@
 <template>
   <div class="login-form">
     <div class="g-form-line">
-      <span>用户名</span>
+      <span>用户名：</span>
       <div class="g-form-input">
         <input type="text" v-model='userNameModel' placeholder="请输入用户名" autofocus>
       </div>
@@ -63,6 +63,22 @@ export default {
       return {
         state,
         errorText
+      }
+    }
+  },
+  methods:{
+    onLogin(){
+      this.loginLoading = true;
+      if(this.userErrors.state || this.passwordErrors.state){
+        this.isTextError = '用户名或密码不正确。'
+      }else{
+        this.isTextError = '';
+        this.$http.get('api/userLogin').then(res =>{
+          this.$emit('has-login',res.data);
+        },err =>{
+          console.log(err);   
+
+        })
       }
     }
   }

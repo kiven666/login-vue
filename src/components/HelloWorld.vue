@@ -10,7 +10,7 @@
             <li>{{ username }}</li>
             <li v-if="username === ''" @click="showDialog('isShowLogDialog')">登录</li>
             <li class="nav-pile">|</li>
-            <li v-if="username != ''">退出</li>
+            <li v-if="username != ''" @click='logOut'>退出</li>
             <li v-if="username === ''" @click="showDialog('isShowRegDialog')">注册</li>
             <li class="nav-pile">|</li>
             <li @click="showDialog('isShowAbtDialog')">关于</li>
@@ -39,7 +39,7 @@
     </my-dialog>
 
     <my-dialog :is-show="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
-      <p>登录弹窗</p>
+      <login-form @has-login='loginSuccess'></login-form>
     </my-dialog>
 
   </div>
@@ -48,6 +48,7 @@
 
 <script>
   import myDialog from './myDialog'
+  import loginForm from './loginForm'
   export default {
 
     name: 'HelloWorld',
@@ -65,10 +66,18 @@
       },
       closeDialog (attr){
         this[attr] = false;
+      },
+      loginSuccess(data){
+        this.isShowLogDialog = false;
+        this.username = data.username;
+      },
+      logOut(){
+        this.username = '';
       }
     },
     components:{
-      myDialog
+      myDialog,
+      loginForm
     }
   }
 </script>
